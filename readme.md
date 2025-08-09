@@ -313,3 +313,299 @@ docker run -p 5000:5000 -e SECRET_KEY=your-secret-key wardha-court-fetcher
    ```nginx
    server {
        listen 80;
+       server_name your-domain.com;
+       
+       location / {
+           proxy_pass http://127.0.0.1:5000;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       }
+   }
+   ```
+
+#### Option 3: Cloud Platforms
+
+**Heroku Deployment**:
+```bash
+# Install Heroku CLI and login
+heroku create wardha-court-fetcher
+git push heroku main
+heroku config:set SECRET_KEY=your-secret-key
+```
+
+**Railway/Render Deployment**:
+- Connect GitHub repository
+- Set environment variables
+- Deploy automatically
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `SECRET_KEY` | Flask secret key for sessions | - | Yes |
+| `DEBUG` | Enable debug mode | `False` | No |
+| `PORT` | Application port | `5000` | No |
+| `DATABASE_URL` | Database connection string | SQLite local | No |
+| `COURT_BASE_URL` | Wardha court website URL | Auto-detected | No |
+| `REQUEST_TIMEOUT` | HTTP request timeout (seconds) | `30` | No |
+| `MAX_RETRIES` | Maximum retry attempts | `3` | No |
+| `LOG_LEVEL` | Logging level | `INFO` | No |
+
+### Customization Options
+
+1. **Case Types**: Modify case types in `get_case_types()` function
+2. **Court URLs**: Update search URLs in scraper configuration
+3. **Styling**: Customize CSS in `static/style.css`
+4. **Database**: Switch to PostgreSQL by updating `DATABASE_URL`
+
+## 📈 Monitoring & Analytics
+
+### Built-in Dashboard
+- Access at `/dashboard`
+- Query statistics and trends
+- System health monitoring
+- Popular case types analysis
+
+### Logging
+- Application logs stored in `app.log`
+- Database query logging
+- Error tracking and debugging
+- Performance monitoring
+
+### Health Checks
+- Endpoint: `/health`
+- Court website connectivity status
+- Database connection status
+- System resource usage
+
+## 🔒 Security Considerations
+
+### Data Protection
+- No sensitive personal data stored permanently
+- Query logging for system monitoring only
+- Secure session management
+- Input validation and sanitization
+
+### Rate Limiting
+- Built-in request delays to respect court website
+- Retry logic with exponential backoff
+- Connection pooling for efficiency
+
+### Legal Compliance
+- Only accesses publicly available information
+- Respects court website terms of service
+- No automated bulk scraping
+- Educational and reference purposes only
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### Court Website Not Accessible
+```
+Error: Wardha District Court website is currently not accessible
+```
+**Solution**: 
+1. Check internet connection
+2. Verify court website is online
+3. Use "Test Connection" feature
+4. System will fall back to demo data
+
+#### Case Not Found
+```
+Error: Case [Type] [Number]/[Year] not found
+```
+**Solution**:
+1. Verify case details (type, number, year)
+2. Check if case exists in court database
+3. Try different case type variations
+4. Contact court directly for verification
+
+#### PDF Download Failed
+```
+Error: Failed to download PDF
+```
+**Solution**:
+1. Check if PDF link is valid
+2. Verify court website accessibility
+3. Try downloading directly from court website
+4. Contact court for physical copies
+
+#### Database Errors
+```
+Error: Unable to log query
+```
+**Solution**:
+1. Check database file permissions
+2. Ensure sufficient disk space
+3. Restart application
+4. Check database integrity
+
+### Debug Mode
+
+Enable debug mode for detailed error information:
+
+```bash
+export FLASK_DEBUG=True
+export FLASK_ENV=development
+python app.py
+```
+
+## 📚 Additional Resources
+
+### Official Documentation
+- [Wardha District Court Website](https://wardha.dcourts.gov.in/)
+- [eCourts Portal](https://ecourts.gov.in/)
+- [National Judicial Data Grid](https://njdg.ecourts.gov.in/)
+
+### Related Projects
+- [eCourts Services](https://services.ecourts.gov.in/)
+- [District Courts Portal](https://districts.ecourts.gov.in/)
+
+### Legal Disclaimer
+This application is an **unofficial** tool created for educational and reference purposes. It is not affiliated with, endorsed by, or connected to Wardha District Court or the Government of Maharashtra. 
+
+**Important Notes**:
+- Always verify information with official court sources
+- This tool should not be used as the sole basis for legal decisions
+- Case information may not be real-time or complete
+- For official documentation, contact the court directly
+
+## 🤝 Contributing
+
+### Development Setup
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make changes and test thoroughly
+4. Commit changes: `git commit -m "Add feature"`
+5. Push to branch: `git push origin feature-name`
+6. Create a Pull Request
+
+### Contribution Guidelines
+
+- Follow PEP 8 Python coding standards
+- Add unit tests for new features
+- Update documentation for changes
+- Test across different case types
+- Ensure mobile responsiveness
+
+### Areas for Contribution
+
+- Additional court integrations
+- Improved CAPTCHA handling
+- Enhanced data parsing
+- Mobile app development
+- Performance optimizations
+- Accessibility improvements
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2024 Wardha District Court Case Search System
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## 📞 Support & Contact
+
+### Issues and Bugs
+- Report issues on GitHub Issues page
+- Provide detailed error messages and steps to reproduce
+- Include system information and browser details
+
+### Feature Requests
+- Submit feature requests via GitHub Issues
+- Describe the use case and expected behavior
+- Consider contributing the feature yourself
+
+### General Questions
+- Check existing documentation first
+- Search closed issues for similar questions
+- Create new issue with "question" label
+
+---
+
+## 🎯 Demo Video Script
+
+### Recording Guidelines (≤ 5 minutes)
+
+**Scene 1: Introduction (30 seconds)**
+```
+"Welcome to the Wardha District Court Case Search System. 
+This application allows you to search and retrieve case information 
+from the District and Sessions Court in Wardha, Maharashtra."
+```
+
+**Scene 2: Basic Search (90 seconds)**
+```
+"Let me demonstrate a basic case search:
+1. Select case type - I'll choose 'Civil Suit'
+2. Enter case number - let's use '123'  
+3. Enter filing year - 2024
+4. Click 'Search Case'
+
+The system now connects to the court website and retrieves the case information."
+```
+
+**Scene 3: Results Display (60 seconds)**
+```
+"Here we can see the case details including:
+- Case title and court information
+- Party details (petitioner and respondent)
+- Important dates like filing date and next hearing
+- Case status and current stage
+- Available orders and judgments"
+```
+
+**Scene 4: Advanced Features (60 seconds)**
+```
+"The system includes several advanced features:
+- Connection testing to verify court website accessibility
+- PDF download functionality for court documents
+- Print-friendly case details
+- Analytics dashboard showing usage statistics"
+```
+
+**Scene 5: Error Handling (30 seconds)**
+```
+"When the court website is unavailable, the system gracefully
+falls back to demo data and clearly indicates this to users,
+ensuring continuity of service."
+```
+
+**Scene 6: Conclusion (30 seconds)**
+```
+"This system demonstrates robust web scraping, user-friendly design,
+and comprehensive error handling for accessing public court records
+from Wardha District Court."
+```
+
+---
+
+**Built with ❤️ for the legal community and citizens of Wardha District, Maharashtra**
+
+*For educational and reference purposes only. Always verify with official court sources.*
