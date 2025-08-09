@@ -1,0 +1,173 @@
+2025-08-06 03:16:22,338 - app - INFO - Database initialized successfully
+2025-08-06 03:16:22,343 - app - INFO - Database initialized successfully
+2025-08-06 03:25:10,330 - __main__ - INFO - Database initialized successfully
+2025-08-06 03:25:10,332 - __main__ - INFO - Starting Wardha District Court Data Fetcher on port 5000
+2025-08-06 03:25:10,332 - __main__ - INFO - Debug mode: False
+2025-08-06 03:25:10,332 - __main__ - INFO - Scraper available: True
+2025-08-06 03:25:10,360 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.21.251.80:5000
+2025-08-06 03:25:10,360 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-06 03:25:17,742 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:25:17] "GET / HTTP/1.1" 200 -
+2025-08-06 03:25:18,336 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:25:18] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-06 03:25:18,368 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:25:18] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-06 03:25:40,452 - __main__ - INFO - Processing search request for Wardha District Court: Criminal Case 1641/2024 from IP: 127.0.0.1
+2025-08-06 03:25:41,352 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 899ms)
+2025-08-06 03:25:41,361 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-06 03:25:41,367 - __main__ - INFO - Query logged successfully for Wardha District Court: Criminal Case 1641/2024 - Status: scraper_exception
+2025-08-06 03:25:41,385 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:25:41] "POST /search HTTP/1.1" 200 -
+2025-08-06 03:25:41,431 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:25:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:26:28,297 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 613ms)
+2025-08-06 03:26:28,303 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:28] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-06 03:26:36,951 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:36] "GET / HTTP/1.1" 200 -
+2025-08-06 03:26:37,015 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:26:37,098 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:37] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-06 03:26:49,191 - __main__ - INFO - Processing search request for Wardha District Court: Execution 1234/2025 from IP: 127.0.0.1
+2025-08-06 03:26:49,709 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 516ms)
+2025-08-06 03:26:49,715 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-06 03:26:49,720 - __main__ - INFO - Query logged successfully for Wardha District Court: Execution 1234/2025 - Status: scraper_exception
+2025-08-06 03:26:49,722 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:49] "POST /search HTTP/1.1" 200 -
+2025-08-06 03:26:49,763 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:26:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:32:14,399 - __main__ - INFO - Processing search request for Wardha District Court: Civil Suit 12345/2025 from IP: 127.0.0.1
+2025-08-06 03:32:15,028 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 627ms)
+2025-08-06 03:32:15,042 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-06 03:32:15,048 - __main__ - INFO - Query logged successfully for Wardha District Court: Civil Suit 12345/2025 - Status: scraper_exception
+2025-08-06 03:32:15,050 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:15] "POST /search HTTP/1.1" 200 -
+2025-08-06 03:32:15,111 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:15] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:32:21,549 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:21] "GET / HTTP/1.1" 200 -
+2025-08-06 03:32:21,590 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:32:21,616 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:21] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-06 03:32:48,974 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:48] "GET /dashboard HTTP/1.1" 200 -
+2025-08-06 03:32:49,024 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:32:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:33:13,177 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:33:13] "GET / HTTP/1.1" 200 -
+2025-08-06 03:33:13,220 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:33:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:33:13,243 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:33:13] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-06 03:33:16,432 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:33:16] "GET /api/stats HTTP/1.1" 200 -
+2025-08-06 03:35:26,675 - __main__ - INFO - Processing search request for Wardha District Court: Cr. Revision 1234567890123456/2023 from IP: 127.0.0.1
+2025-08-06 03:35:27,218 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 541ms)
+2025-08-06 03:35:27,223 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-06 03:35:27,228 - __main__ - INFO - Query logged successfully for Wardha District Court: Cr. Revision 1234567890123456/2023 - Status: scraper_exception
+2025-08-06 03:35:27,229 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:35:27] "POST /search HTTP/1.1" 200 -
+2025-08-06 03:35:27,283 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:35:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:35:37,510 - __main__ - INFO - Processing search request for Wardha District Court: Criminal Case 1234567890123456/2023 from IP: 127.0.0.1
+2025-08-06 03:35:37,930 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 419ms)
+2025-08-06 03:35:37,935 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-06 03:35:37,940 - __main__ - INFO - Query logged successfully for Wardha District Court: Criminal Case 1234567890123456/2023 - Status: scraper_exception
+2025-08-06 03:35:37,941 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:35:37] "POST /search HTTP/1.1" 200 -
+2025-08-06 03:35:37,971 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:35:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:40:18,851 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:40:18] "GET / HTTP/1.1" 200 -
+2025-08-06 03:40:18,904 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:40:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-06 03:40:18,931 - werkzeug - INFO - 127.0.0.1 - - [06/Aug/2025 03:40:18] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-07 02:10:19,312 - __main__ - INFO - Database initialized successfully
+2025-08-07 02:10:19,315 - __main__ - INFO - Starting Wardha District Court Data Fetcher on port 5000
+2025-08-07 02:10:19,316 - __main__ - INFO - Debug mode: False
+2025-08-07 02:10:19,316 - __main__ - INFO - Scraper available: True
+2025-08-07 02:10:19,445 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://20.0.1.146:5000
+2025-08-07 02:10:19,462 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-07 02:10:24,835 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:10:24] "GET / HTTP/1.1" 200 -
+2025-08-07 02:10:26,526 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:10:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-07 02:10:26,538 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:10:26] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-07 02:10:29,116 - __main__ - WARNING - 404 error: http://127.0.0.1:5000/favicon.ico
+2025-08-07 02:10:29,128 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:10:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-07 02:11:03,549 - __main__ - INFO - Processing search request for Wardha District Court: Civil Misc. 1234567890123456/2022 from IP: 127.0.0.1
+2025-08-07 02:11:04,234 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 684ms)
+2025-08-07 02:11:04,251 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-07 02:11:04,265 - __main__ - INFO - Query logged successfully for Wardha District Court: Civil Misc. 1234567890123456/2022 - Status: scraper_exception
+2025-08-07 02:11:04,289 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:04] "POST /search HTTP/1.1" 200 -
+2025-08-07 02:11:04,377 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-07 02:11:38,878 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:38] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:11:38,909 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-07 02:11:49,379 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:49] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:11:49,415 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:11:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-07 02:12:01,553 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:12:01] "GET / HTTP/1.1" 200 -
+2025-08-07 02:12:01,589 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:12:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-07 02:12:01,614 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:12:01] "GET /api/case_types HTTP/1.1" 200 -
+2025-08-07 02:43:02,198 - __main__ - INFO - Database initialized successfully
+2025-08-07 02:43:02,200 - __main__ - INFO - Starting Wardha District Court Data Fetcher on port 5000
+2025-08-07 02:43:02,201 - __main__ - INFO - Debug mode: False
+2025-08-07 02:43:02,201 - __main__ - INFO - Scraper available: True
+2025-08-07 02:43:02,225 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://20.0.1.146:5000
+2025-08-07 02:43:02,225 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-07 02:43:11,976 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:43:11] "GET / HTTP/1.1" 200 -
+2025-08-07 02:43:15,439 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:43:15] "GET / HTTP/1.1" 200 -
+2025-08-07 02:43:42,932 - __main__ - INFO - Processing search request for Wardha District Court: Criminal Case 12345/2021 from IP: 127.0.0.1
+2025-08-07 02:43:43,475 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 541ms)
+2025-08-07 02:43:43,500 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-07 02:43:43,525 - __main__ - INFO - Query logged successfully for Wardha District Court: Criminal Case 12345/2021 - Status: scraper_exception
+2025-08-07 02:43:43,578 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:43:43] "POST /search HTTP/1.1" 200 -
+2025-08-07 02:44:47,602 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:44:47] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:45:01,524 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 374ms)
+2025-08-07 02:45:01,530 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:01] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:45:10,091 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 561ms)
+2025-08-07 02:45:10,103 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:10] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:45:13,258 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 433ms)
+2025-08-07 02:45:13,266 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:13] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:45:16,806 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:16] "GET / HTTP/1.1" 200 -
+2025-08-07 02:45:20,454 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:20] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:45:26,094 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:26] "GET /api/stats HTTP/1.1" 200 -
+2025-08-07 02:45:33,950 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 505ms)
+2025-08-07 02:45:33,959 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:33] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:45:48,871 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:45:48] "GET /api/stats HTTP/1.1" 200 -
+2025-08-07 02:47:14,242 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 446ms)
+2025-08-07 02:47:14,249 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:47:14] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:55:30,587 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:55:30] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:55:41,975 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:55:41] "GET / HTTP/1.1" 200 -
+2025-08-07 02:55:57,947 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:55:57] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:56:02,818 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 628ms)
+2025-08-07 02:56:02,825 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:56:02] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-07 02:56:08,183 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:56:08] "GET /api/stats HTTP/1.1" 200 -
+2025-08-07 02:56:10,565 - werkzeug - INFO - 127.0.0.1 - - [07/Aug/2025 02:56:10] "GET / HTTP/1.1" 200 -
+2025-08-07 02:56:45,372 - __main__ - INFO - Database initialized successfully
+2025-08-07 02:56:45,373 - __main__ - INFO - Starting Wardha District Court Data Fetcher on port 5000
+2025-08-07 02:56:45,373 - __main__ - INFO - Debug mode: False
+2025-08-07 02:56:45,374 - __main__ - INFO - Scraper available: True
+2025-08-07 02:56:45,397 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://20.0.1.146:5000
+2025-08-07 02:56:45,397 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-07 02:56:55,677 - werkzeug - INFO - 20.0.1.146 - - [07/Aug/2025 02:56:55] "GET / HTTP/1.1" 200 -
+2025-08-07 02:56:56,264 - __main__ - WARNING - 404 error: http://20.0.1.146:5000/favicon.ico
+2025-08-07 02:56:56,266 - werkzeug - INFO - 20.0.1.146 - - [07/Aug/2025 02:56:56] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-07 02:57:15,828 - __main__ - INFO - Processing search request for Wardha District Court: Sessions Case 12345/2023 from IP: 20.0.1.146
+2025-08-07 02:57:16,316 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 486ms)
+2025-08-07 02:57:16,323 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-07 02:57:16,338 - __main__ - INFO - Query logged successfully for Wardha District Court: Sessions Case 12345/2023 - Status: scraper_exception
+2025-08-07 02:57:16,375 - werkzeug - INFO - 20.0.1.146 - - [07/Aug/2025 02:57:16] "POST /search HTTP/1.1" 200 -
+2025-08-07 02:58:04,791 - werkzeug - INFO - 20.0.1.146 - - [07/Aug/2025 02:58:04] "GET /dashboard HTTP/1.1" 200 -
+2025-08-07 02:58:12,115 - werkzeug - INFO - 20.0.1.146 - - [07/Aug/2025 02:58:12] "GET / HTTP/1.1" 200 -
+2025-08-08 01:27:40,114 - __main__ - INFO - Database initialized successfully
+2025-08-08 01:27:40,126 - __main__ - INFO - Starting Wardha District Court Data Fetcher on port 5000
+2025-08-08 01:27:40,127 - __main__ - INFO - Debug mode: False
+2025-08-08 01:27:40,127 - __main__ - INFO - Scraper available: True
+2025-08-08 01:27:40,464 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://20.0.1.146:5000
+2025-08-08 01:27:40,465 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-08 01:28:00,118 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:28:00] "GET / HTTP/1.1" 200 -
+2025-08-08 01:28:01,120 - __main__ - WARNING - 404 error: http://127.0.0.1:5000/favicon.ico
+2025-08-08 01:28:01,122 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:28:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 01:29:23,143 - __main__ - INFO - Processing search request for Wardha District Court: Sessions Case 4885/2024 from IP: 127.0.0.1
+2025-08-08 01:29:24,062 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 918ms)
+2025-08-08 01:29:24,099 - __main__ - ERROR - Scraper exception: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2025-08-08 01:29:24,121 - __main__ - INFO - Query logged successfully for Wardha District Court: Sessions Case 4885/2024 - Status: scraper_exception
+2025-08-08 01:29:24,253 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:29:24] "POST /search HTTP/1.1" 200 -
+2025-08-08 01:29:39,687 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:29:39] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 01:29:46,068 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 942ms)
+2025-08-08 01:29:46,075 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:29:46] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-08 01:29:55,897 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:29:55] "GET / HTTP/1.1" 200 -
+2025-08-08 01:30:31,146 - werkzeug - INFO - 20.0.5.32 - - [08/Aug/2025 01:30:31] "GET / HTTP/1.1" 200 -
+2025-08-08 01:30:31,431 - __main__ - WARNING - 404 error: http://20.0.1.146:5000/favicon.ico
+2025-08-08 01:30:31,434 - werkzeug - INFO - 20.0.5.32 - - [08/Aug/2025 01:30:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 01:30:35,207 - werkzeug - INFO - 20.0.5.32 - - [08/Aug/2025 01:30:35] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 01:30:45,153 - __main__ - INFO - Court website accessible at: https://wardha.dcourts.gov.in/ (Response time: 553ms)
+2025-08-08 01:30:45,161 - werkzeug - INFO - 20.0.5.32 - - [08/Aug/2025 01:30:45] "GET /api/test_connection HTTP/1.1" 200 -
+2025-08-08 01:31:33,246 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 01:31:33] "GET /dashboard HTTP/1.1" 200 -

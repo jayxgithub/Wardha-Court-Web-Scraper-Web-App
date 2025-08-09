@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Details - {{ case_data.case_title }} | Wardha District Court</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Case details for {{ case_data.case_title }} from Wardha District Court">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern Header -->
+        <header class="result-header">
+            <div class="header-background"></div>
+            <div class="header-content">
+                <div class="header-brand">
+                    <i class="fas fa-balance-scale"></i>
+                    <div>
+                        <h1>Wardha District Court</h1>
+                        <p>Case Information Retrieved Successfully</p>
+                    </div>
+                </div>
+                {% if case_data.warning %}
+                <div class="header-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ case_data.warning }}
+                </div>
+                {% endif %}
+            </div>
+        </header>
+
+        <main class="main-container">
+            <!-- Breadcrumb Navigation -->
+            <nav class="modern-breadcrumb">
+                <a href="/" class="breadcrumb-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <i class="fas fa-chevron-right"></i>
+                <span class="breadcrumb-current">Case Details</span>
+            </nav>
+
+            {% if case_data.error %}
+            <!-- Error State -->
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>{{ case_data.error }}</h2>
+                {% if case_data.message %}
+                <p>{{ case_data.message }}</p>
+                {% endif %}
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Search Another Case
+                </a>
+            </div>
+            {% else %}
+            
+            <!-- Case Header -->
+            <div class="case-header-card">
+                <div class="case-title-section">
+                    <div class="case-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="case-info">
+                        <h1 class="case-title">{{ case_data.case_title }}</h1>
+                        <div class="court-name">
+                            <i class="fas fa-university"></i>
+                            {{ case_data.court_name or 'District and Sessions Court, Wardha' }}
+                        </div>
+                        <div class="case-meta">
+                            {% if case_data.status %}
+                            <div class="case-status status-{{ case_data.status.lower().replace(' ', '-') }}">
+                                <i class="fas fa-info-circle"></i>
+                                {{ case_data.status }}
+                            </div>
+                            {% endif %}
+                            {% if case_data.stage %}
+                            <div class="case-stage">
+                                <i class="fas fa-clock"></i>
+                                Stage: {{ case_data.stage }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <button onclick="printCaseDetails()" class="btn btn-outline">
+                        <i class="fas fa-print"></i>
+                        Print
+                    </button>
+                    <button onclick="copyCaseDetails()" class="btn btn-secondary">
+                        <i class="fas fa-copy"></i>
+                        Copy
+                    </button>
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        New Search
+                    </a>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <!-- Case Information Card -->
+                <div class="detail-card card-purple">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h3>Case Information</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="detail-item">
+                            <span class="detail-label">Case Number:</span>
+                            <span class="detail-value">{{ case_number }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Case Type:</span>
+                            <span class="detail-value">{{ case_type }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Filing Year:</span>
+                            <span class="detail-value">{{ filing_year }}</span>
+                        </div>
+                        {% if case_data.filing_date %}
+                        <div class="detail-item">
+                            <span class="detail-label">Filing Date:</span>
+                            <span class="detail-value">{{ case_data.filing_date }}</span>
+                        </div>
+                        {% endif %}
+                        {% if case_data.next_hearing_date %}
+                        <div class="detail-item highlight">
+                            <span class="detail-label">Next Hearing:</span>
+                            <span class="detail-value">{{ case_data.next_hearing_date }}</span>
+                        </div>
+                        {% endif %}
+                        {% if case_data.judge %}
+                        <div class="detail-item">
+                            <span class="detail-label">Presiding Judge:</span>
+                            <span class="detail-value">{{ case_data.judge }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="detail-item">
+                            <span class="detail-label">Last Updated:</span>
+                            <span class="detail-value">{{ case_data.last_updated }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parties Information Card -->
+                <div class="detail-card card-blue">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Parties to the Case</h3>
+                    </div>
+                    <div class="card-content">
+                        {% if case_data.parties.petitioner %}
+                        <div class="party-section">
+                            <h4 class="party-title">
+                                <i class="fas fa-user"></i>
+                                {% if 'criminal' in case_type.lower() or 'cr.' in case_type.lower() %}
+                                    Prosecution
+                                {% else %}
+                                    Petitioner(s)/Plaintiff(s)
+                                {% endif %}
+                            </h4>
+                            <div class="party-list">
+                                {% for petitioner in case_data.parties.petitioner %}
+                                <div class="party-item">{{ petitioner }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if case_data.parties.respondent %}
+                        <div class="party-section">
+                            <h4 class="party-title">
+                                <i class="fas fa-user-tie"></i>
+                                {% if 'criminal' in case_type.lower() or 'cr.' in case_type.lower() %}
+                                    Accused/Defense
+                                {% else %}
+                                    Respondent(s)/Defendant(s)
+                                {% endif %}
+                            </h4>
+                            <div class="party-list">
+                                {% for respondent in case_data.parties.respondent %}
+                                <div class="party-item">{{ respondent }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if not case_data.parties.petitioner and not case_data.parties.respondent %}
+                        <div class="no-data">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Party information not available in the database</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Court Details Card -->
+            {% if case_data.court_details %}
+            <div class="detail-card card-green full-width">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>Court Details</h3>
+                </div>
+                <div class="card-content">
+                    <div class="court-details-grid">
+                        {% if case_data.court_details.address %}
+                        <div class="detail-item">
+                            <span class="detail-label">Address:</span>
+                            <span class="detail-value">{{ case_data.court_details.address }}</span>
+                        </div>
+                        {% endif %}
+                        {% if case_data.court_details.phone %}
+                        <div class="detail-item">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value">{{ case_data.court_details.phone }}</span>
+                        </div>
+                        {% endif %}
+                        {% if case_data.court_details.email %}
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">{{ case_data.court_details.email }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Orders and Judgments Section -->
+            <div class="detail-card card-orange full-width orders-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Orders, Judgments & Case History</h3>
+                </div>
+                <div class="card-content">
+                    {% if case_data.orders %}
+                    <div class="orders-grid">
+                        {% for order in case_data.orders %}
+                        <div class="order-card">
+                            <div class="order-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="order-content">
+                                <h5 class="order-title">{{ order.description }}</h5>
+                                {% if order.date %}
+                                <div class="order-meta">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ order.date }}
+                                </div>
+                                {% endif %}
+                                {% if order.court %}
+                                <div class="order-meta">
+                                    <i class="fas fa-university"></i>
+                                    {{ order.court }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="order-actions">
+                                {% if order.pdf_link %}
+                                <a href="{{ url_for('download_pdf', url=order.pdf_link, filename=order.description + '.pdf') }}" 
+                                   class="btn btn-sm btn-primary" 
+                                   target="_blank"
+                                   title="Download PDF document">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                {% else %}
+                                <span class="no-pdf">
+                                    <i class="fas fa-info-circle"></i>
+                                    No PDF
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-data large">
+                        <div class="no-data-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h4>No Orders Available</h4>
+                        <p>Orders or judgments are not available for download at this time</p>
+                        <small>Documents may not be digitized or available in the online system</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            {% if case_data.note %}
+            <div class="info-alert">
+                <i class="fas fa-info-circle"></i>
+                <span>{{ case_data.note }}</span>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="action-section">
+                <div class="primary-actions">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Search Another Case
+                    </a>
+                    <button onclick="printCaseDetails()" class="btn btn-outline">
+                        <i class="fas fa-print"></i>
+                        Print Case Details
+                    </button>
+                </div>
+                <div class="secondary-actions">
+                    <a href="/dashboard" class="btn btn-secondary">
+                        <i class="fas fa-chart-bar"></i>
+                        Dashboard
+                    </a>
+                    <a href="https://wardha.dcourts.gov.in/" target="_blank" class="btn btn-outline">
+                        <i class="fas fa-external-link-alt"></i>
+                        Official Website
+                    </a>
+                </div>
+            </div>
+
+            {% endif %}
+        </main>
+
+        <!-- Modern Footer -->
+        <footer class="modern-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Wardha District Court</span>
+                    </div>
+                    <p>&copy; 2024 Wardha District Court Case Search System. Built for educational and reference purposes.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://wardha.dcourts.gov.in/" target="_blank" class="footer-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Official Website
+                    </a>
+                    <a href="https://ecourts.gov.in/" target="_blank" class="footer-link">
+                        <i class="fas fa-globe"></i>
+                        eCourts Portal
+                    </a>
+                </div>
+                <div class="footer-disclaimer">
+                    <strong>Disclaimer:</strong> This is an unofficial tool. For official information, contact the court directly.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Success Toast Template -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        // Enhanced printing functionality
+        function printCaseDetails() {
+            window.print();
+        }
+
+        // Copy case details to clipboard
+        function copyCaseDetails() {
+            const caseTitle = document.querySelector('.case-title').textContent;
+            const caseDetails = Array.from(document.querySelectorAll('.detail-item')).map(item => {
+                const label = item.querySelector('.detail-label')?.textContent || '';
+                const value = item.querySelector('.detail-value')?.textContent || '';
+                return `${label} ${value}`;
+            }).join('\n');
+            
+            const textToCopy = `${caseTitle}\n\n${caseDetails}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('Case details copied to clipboard', 'success');
+            }).catch(err => {
+                showToast('Failed to copy case details', 'error');
+            });
+        }
+
+        // Enhanced toast notification system
+        function showToast(message, type = 'info', duration = 4000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle';
+            
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="fas fa-${icon}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Enhanced page load animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate breadcrumb
+            setTimeout(() => {
+                document.querySelector('.modern-breadcrumb').classList.add('slide-in');
+            }, 200);
+            
+            // Animate case header
+            setTimeout(() => {
+                document.querySelector('.case-header-card').classList.add('fade-in');
+            }, 400);
+            
+            // Animate detail cards with stagger effect
+            const cards = document.querySelectorAll('.detail-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('slide-up');
+                }, 600 + (index * 150));
+            });
+            
+            // Animate action buttons
+            setTimeout(() => {
+                document.querySelector('.action-section').classList.add('fade-in');
+            }, 1000 + (cards.length * 150));
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printCaseDetails();
+            }
+            
+            if (e.ctrlKey && e.key === 'c' && e.altKey) {
+                e.preventDefault();
+                copyCaseDetails();
+            }
+            
+            if (e.key === 'Escape') {
+                window.location.href = '/';
+            }
+        });
+
+        // Auto-refresh for pending cases
+        const caseStatus = document.querySelector('.case-status');
+        if (caseStatus && caseStatus.textContent.toLowerCase().includes('pending')) {
+            let refreshTimer;
+            
+            const refreshButton = document.createElement('button');
+            refreshButton.className = 'btn btn-sm btn-outline auto-refresh-btn';
+            refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Auto-refresh (5min)';
+            refreshButton.onclick = function() {
+                if (refreshTimer) {
+                    clearInterval(refreshTimer);
+                    refreshTimer = null;
+                    this.innerHTML = '<i class="fas fa-sync-alt"></i> Auto-refresh (5min)';
+                    showToast('Auto-refresh disabled', 'info');
+                } else {
+                    refreshTimer = setInterval(() => {
+                        window.location.reload();
+                    }, 300000);
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Auto-refresh ON';
+                    showToast('Auto-refresh enabled (every 5 minutes)', 'success');
+                }
+            };
+            
+            document.querySelector('.case-actions').appendChild(refreshButton);
+        }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Result Header */
+        .result-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-brand i {
+            font-size: 3rem;
+        }
+
+        .header-brand h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-brand p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .header-warning {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        /* Modern Breadcrumb */
+        .modern-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .modern-breadcrumb.slide-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .breadcrumb-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .breadcrumb-current {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: #e74c3c;
+            margin-bottom: 2rem;
+        }
+
+        .error-container h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .error-container p {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Case Header Card */
+        .case-header-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .case-header-card.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .case-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+
+        .case-title-section {
+            flex: 1;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .case-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .case-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .court-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .case-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .case-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .case-status.status-pending {
+            background: linear-gradient(135deg, #ffd93d, #ff8f00);
+            color: #8b4513;
+        }
+
+        .case-status.status-disposed {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            color: white;
+        }
+
+        .case-status.status-active {
+            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            color: white;
+        }
+
+        .case-stage {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f8f9fa;
+            color: #495057;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .case-actions {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Detail Cards */
+        .detail-card {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s ease;
+        }
+
+        .detail-card.slide-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .detail-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .card-purple .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .card-blue .card-header {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .card-green .card-header {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .card-orange .card-header {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        /* Detail Items */
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f3f4;
+            gap: 1rem;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item.highlight {
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+            margin: 0 -2rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 140px;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: right;
+            flex: 1;
+        }
+
+        /* Party Sections */
+        .party-section {
+            margin-bottom: 2rem;
+        }
+
+        .party-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .party-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            color: #495057;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f3f4;
+        }
+
+        .party-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .party-item {
+            background: #f8f9fa;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Court Details Grid */
+        .court-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Orders Section */
+        .orders-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .order-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .order-content {
+            flex: 1;
+        }
+
+        .order-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .order-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .order-actions {
+            flex-shrink: 0;
+        }
+
+        .no-pdf {
+            color: #6c757d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* No Data States */
+        .no-data {
+            text-align: center;
+            color: #6c757d;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .no-data.large {
+            flex-direction: column;
+            padding: 3rem;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .no-data h4 {
+            font-size: 1.3rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-data p {
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Action Section */
+        .action-section {
+            margin-top: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .action-section.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .primary-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .secondary-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Info Alert */
+        .info-alert {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1565c0;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Toast System */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.hide {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .toast-success {
+            border-left: 5px solid #28a745;
+        }
+
+        .toast-error {
+            border-left: 5px solid #dc3545;
+        }
+
+        .toast-info {
+            border-left: 5px solid #17a2b8;
+        }
+
+        .toast-content {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast-close {
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .toast-close:hover {
+            color: #495057;
+        }
+
+        /* Modern Footer */
+        .modern-footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 2rem;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%232c3e50'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-main {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-disclaimer {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        /* Auto-refresh button */
+        .auto-refresh-btn {
+            margin-left: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .case-header-card {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+
+            .case-title {
+                font-size: 1.8rem;
+            }
+
+            .case-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .case-title-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .primary-actions,
+            .secondary-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .toast {
+                min-width: 280px;
+                margin: 0 1rem;
+            }
+
+            .toast-container {
+                left: 0;
+                right: 0;
+                top: 10px;
+                align-items: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .case-actions,
+            .action-section,
+            .modern-footer,
+            .toast-container,
+            .auto-refresh-btn {
+                display: none !important;
+            }
+
+            .case-header-card {
+                border: 2px solid #000;
+                margin-bottom: 1rem;
+            }
+
+            .detail-card {
+                break-inside: avoid;
+                margin-bottom: 1rem;
+                border: 1px solid #ddd;
+            }
+
+            .card-header {
+                background: #f8f9fa !important;
+                color: black !important;
+            }
+        }
+    </style>
+</body>
+</html>

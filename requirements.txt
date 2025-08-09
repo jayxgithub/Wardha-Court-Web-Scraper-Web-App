@@ -1,0 +1,100 @@
+# Core Flask Dependencies
+Flask==2.3.3
+Werkzeug==2.3.7
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+itsdangerous==2.1.2
+click==8.1.7
+
+# Web Scraping Dependencies
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+html5lib==1.1
+urllib3==2.0.4
+
+# HTTP Client Enhancements
+requests-cache==1.1.0
+requests-ratelimiter==0.4.0
+
+# Database Dependencies
+sqlite3==3.42.0  # Built into Python, but listed for reference
+
+# Data Processing
+json5==0.9.14
+python-dateutil==2.8.2
+
+# Logging and Monitoring
+loguru==0.7.2
+
+# Environment Configuration
+python-dotenv==1.0.0
+
+# Security
+cryptography==41.0.4
+
+# Testing Dependencies (Development)
+pytest==7.4.2
+pytest-cov==4.1.0
+pytest-mock==3.11.1
+pytest-flask==1.2.0
+
+# Code Quality (Development)
+flake8==6.0.0
+black==23.7.0
+isort==5.12.0
+
+# Production WSGI Server
+gunicorn==21.2.0
+gevent==23.7.0
+
+# Optional: PostgreSQL Support
+# psycopg2-binary==2.9.7
+# SQLAlchemy==2.0.21
+
+# Optional: Redis Support (for caching)
+# redis==4.6.0
+# Flask-Caching==2.1.0
+
+# Optional: Email Support
+# Flask-Mail==0.9.1
+
+# Optional: Advanced Rate Limiting
+# Flask-Limiter==3.5.0
+
+# Optional: API Documentation
+# flask-restx==1.2.0
+# flasgger==0.9.7.1
+
+# Optional: Background Tasks
+# celery==5.3.1
+# flower==2.0.1
+
+# Development Tools
+# Flask-DebugToolbar==0.13.1
+# watchdog==3.0.0
+
+# Data Validation
+cerberus==1.3.5
+marshmallow==3.20.1
+
+# HTTP Status Codes
+http-status==0.2.1
+
+# Date/Time Utilities
+pytz==2023.3
+pendulum==2.1.2
+
+# File Processing
+pathlib2==2.3.7
+python-magic==0.4.27
+
+# Performance Monitoring
+# newrelic==8.10.0
+# sentry-sdk[flask]==1.32.0
+
+# Health Checks
+# Flask-HealthCheck==1.0.0
+
+# Metrics and Analytics
+# prometheus-flask-exporter==0.23.0

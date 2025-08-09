@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Wardha District Court Case Search System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern Header -->
+        <header class="dashboard-header">
+            <div class="header-background">
+                <div class="header-pattern"></div>
+                <div class="floating-elements">
+                    <div class="float-element float-1"></div>
+                    <div class="float-element float-2"></div>
+                    <div class="float-element float-3"></div>
+                    <div class="float-element float-4"></div>
+                </div>
+            </div>
+            <div class="header-content">
+                <div class="header-brand">
+                    <div class="brand-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="brand-info">
+                        <h1>Analytics Dashboard</h1>
+                        <p>Wardha District Court Case Search System</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button onclick="refreshDashboard()" class="btn btn-outline" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        <span>Search Cases</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-container">
+            <!-- Breadcrumb Navigation -->
+            <nav class="modern-breadcrumb">
+                <a href="/" class="breadcrumb-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <i class="fas fa-chevron-right"></i>
+                <span class="breadcrumb-current">Dashboard</span>
+            </nav>
+
+            <!-- Stats Overview Cards -->
+            <div class="stats-grid">
+                <div class="stat-card card-blue">
+                    <div class="stat-background">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ stats.total_queries or 0 }}</div>
+                        <div class="stat-label">Total Searches</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12% from last week</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card card-green">
+                    <div class="stat-background">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">
+                            {% set success_count = stats.status_stats|selectattr('0', 'equalto', 'success')|list %}
+                            {{ success_count[0][1] if success_count else 0 }}
+                        </div>
+                        <div class="stat-label">Successful Queries</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8% success rate</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card card-purple">
+                    <div class="stat-background">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">District Court</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Wardha District</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card card-orange">
+                    <div class="stat-background">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ (stats.daily_stats|length) or 0 }}</div>
+                        <div class="stat-label">Active Days</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-clock"></i>
+                            <span>Last 7 days</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <!-- Query Status Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-pie-chart"></i>
+                            <h3>Query Status Distribution</h3>
+                        </div>
+                        <div class="chart-actions">
+                            <button class="btn-icon" title="Export Chart">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn-icon" title="Fullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        {% if stats.status_stats %}
+                        <div class="status-chart">
+                            {% set max_count = stats.status_stats[0][1] if stats.status_stats else 1 %}
+                            {% for status, count in stats.status_stats %}
+                            <div class="status-item">
+                                <div class="status-info">
+                                    <div class="status-indicator status-{{ status }}"></div>
+                                    <span class="status-name">{{ status.replace('_', ' ').title() }}</span>
+                                </div>
+                                <div class="status-bar-container">
+                                    <div class="status-bar">
+                                        <div class="status-fill status-{{ status }}" 
+                                             style="width: {{ (count / stats.total_queries * 100) if stats.total_queries > 0 else 0 }}%"
+                                             data-width="{{ (count / stats.total_queries * 100) if stats.total_queries > 0 else 0 }}%"></div>
+                                    </div>
+                                    <span class="status-count">{{ count }} ({{ "%.1f"|format((count / stats.total_queries * 100) if stats.total_queries > 0 else 0) }}%)</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="no-data">
+                            <div class="no-data-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h4>No Data Available</h4>
+                            <p>Query status data will appear here once searches are performed</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Popular Case Types -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>Popular Case Types</h3>
+                        </div>
+                        <div class="chart-actions">
+                            <button class="btn-icon" title="Export Chart">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        {% if stats.case_type_stats %}
+                        <div class="case-type-chart">
+                            {% set max_case_count = stats.case_type_stats[0][1] if stats.case_type_stats else 1 %}
+                            {% for case_type, count in stats.case_type_stats[:6] %}
+                            <div class="case-type-item">
+                                <div class="case-type-info">
+                                    <div class="case-type-name">{{ case_type or 'Unknown' }}</div>
+                                    <div class="case-type-count">{{ count }} searches</div>
+                                </div>
+                                <div class="case-type-bar-container">
+                                    <div class="case-type-bar">
+                                        <div class="case-type-fill" 
+                                             style="width: {{ (count / max_case_count * 100) if max_case_count > 0 else 0 }}%"
+                                             data-width="{{ (count / max_case_count * 100) if max_case_count > 0 else 0 }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="no-data">
+                            <div class="no-data-icon">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <h4>No Case Type Data</h4>
+                            <p>Case type statistics will appear here once searches are performed</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Activity Chart -->
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Daily Activity (Last 7 Days)</h3>
+                    </div>
+                    <div class="chart-actions">
+                        <button class="btn-icon" title="Export Data">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn-icon" title="View Details">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-content">
+                    {% if stats.daily_stats %}
+                    <div class="daily-activity-chart">
+                        {% set max_daily_count = stats.daily_stats|map(attribute='1')|max %}
+                        {% for date, count in stats.daily_stats %}
+                        <div class="daily-item">
+                            <div class="daily-bar-container">
+                                <div class="daily-bar">
+                                    <div class="daily-fill" 
+                                         style="height: {{ (count / max_daily_count * 100) if max_daily_count > 0 else 0 }}%"
+                                         data-height="{{ (count / max_daily_count * 100) if max_daily_count > 0 else 0 }}%"
+                                         data-count="{{ count }}"></div>
+                                </div>
+                                <div class="daily-tooltip">
+                                    <div class="tooltip-content">
+                                        <strong>{{ count }} searches</strong>
+                                        <br>{{ date }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="daily-label">{{ date.split('-')[-1] if '-' in date else date }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-data large">
+                        <div class="no-data-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>No Activity Data</h4>
+                        <p>Daily activity statistics will appear here once searches are performed</p>
+                        <button class="btn btn-outline" onclick="window.location.href='/'">
+                            <i class="fas fa-search"></i>
+                            Start Searching
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- System Information -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3>System Information</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-university"></i>
+                                Target Court
+                            </div>
+                            <div class="info-value">{{ stats.court or 'Wardha District Court' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-globe"></i>
+                                Court Website
+                            </div>
+                            <div class="info-value">
+                                <a href="https://wardha.dcourts.gov.in/" target="_blank" rel="noopener">
+                                    wardha.dcourts.gov.in
+                                </a>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-database"></i>
+                                Database
+                            </div>
+                            <div class="info-value">SQLite (Local Storage)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-code"></i>
+                                Framework
+                            </div>
+                            <div class="info-value">Flask (Python)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Status & Updates</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="status-item">
+                            <div class="status-indicator online"></div>
+                            <div class="status-info">
+                                <div class="status-title">System Status</div>
+                                <div class="status-desc">All systems operational</div>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator warning"></div>
+                            <div class="status-info">
+                                <div class="status-title">Last Updated</div>
+                                <div class="status-desc" id="lastUpdated">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator success"></div>
+                            <div class="status-info">
+                                <div class="status-title">Connection</div>
+                                <div class="status-desc">Stable connection to court website</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="actions-section">
+                <div class="section-header">
+                    <h3>Quick Actions</h3>
+                    <p>Frequently used functions and tools</p>
+                </div>
+                <div class="actions-grid">
+                    <a href="/" class="action-card card-blue">
+                        <div class="action-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Search Cases</h4>
+                            <p>Find case information by case number and type</p>
+                        </div>
+                        <div class="action-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="/api/stats" class="action-card card-green" target="_blank">
+                        <div class="action-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Export Data</h4>
+                            <p>Download system statistics and analytics data</p>
+                        </div>
+                        <div class="action-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="/api/test_connection" class="action-card card-purple" target="_blank">
+                        <div class="action-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Test Connection</h4>
+                            <p>Check connectivity to court website</p>
+                        </div>
+                        <div class="action-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://wardha.dcourts.gov.in/" class="action-card card-orange" target="_blank">
+                        <div class="action-icon">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Official Website</h4>
+                            <p>Visit Wardha District Court official website</p>
+                        </div>
+                        <div class="action-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modern Footer -->
+        <footer class="modern-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Wardha District Court Dashboard</span>
+                    </div>
+                    <p>Real-time analytics and insights for case search operations</p>
+                </div>
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <span class="stat-number">{{ stats.total_queries or 0 }}</span>
+                        <span class="stat-label">Total Searches</span>
+                    </div>
+                    <div class="footer-stat">
+                        <span class="stat-number">{{ (stats.daily_stats|length) or 0 }}</span>
+                        <span class="stat-label">Active Days</span>
+                    </div>
+                    <div class="footer-stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Set last updated time
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+
+        // Enhanced refresh functionality
+        function refreshDashboard() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const icon = refreshBtn.querySelector('i');
+            const text = refreshBtn.querySelector('span');
+            
+            refreshBtn.disabled = true;
+            icon.classList.add('fa-spin');
+            text.textContent = 'Refreshing...';
+            
+            // Simulate refresh with smooth animation
+            setTimeout(() => {
+                // Re-animate charts
+                animateCharts();
+                
+                // Update timestamp
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+                
+                // Reset button
+                refreshBtn.disabled = false;
+                icon.classList.remove('fa-spin');
+                text.textContent = 'Refresh';
+                
+                showToast('Dashboard refreshed successfully', 'success');
+            }, 2000);
+        }
+
+        // Animate charts and stats
+        function animateCharts() {
+            // Animate stat cards
+            document.querySelectorAll('.stat-card').forEach((card, index) => {
+                card.style.animation = 'none';
+                setTimeout(() => {
+                    card.style.animation = 'slideInUp 0.6s ease-out';
+                }, index * 100);
+            });
+
+            // Animate status bars
+            document.querySelectorAll('.status-fill').forEach((fill, index) => {
+                const width = fill.dataset.width || '0%';
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.transition = 'width 1s ease-out';
+                    fill.style.width = width;
+                }, 500 + (index * 150));
+            });
+
+            // Animate case type bars
+            document.querySelectorAll('.case-type-fill').forEach((fill, index) => {
+                const width = fill.dataset.width || '0%';
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.transition = 'width 1s ease-out';
+                    fill.style.width = width;
+                }, 700 + (index * 100));
+            });
+
+            // Animate daily activity bars
+            document.querySelectorAll('.daily-fill').forEach((fill, index) => {
+                const height = fill.dataset.height || '0%';
+                fill.style.height = '0%';
+                setTimeout(() => {
+                    fill.style.transition = 'height 0.8s ease-out';
+                    fill.style.height = height;
+                }, 900 + (index * 100));
+            });
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 4000);
+        }
+
+        // Enhanced page load animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate header
+            setTimeout(() => {
+                document.querySelector('.header-brand').classList.add('slide-in-left');
+                document.querySelector('.header-actions').classList.add('slide-in-right');
+            }, 200);
+
+            // Animate breadcrumb
+            setTimeout(() => {
+                document.querySelector('.modern-breadcrumb').classList.add('fade-in');
+            }, 400);
+
+            // Animate stats with stagger
+            document.querySelectorAll('.stat-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-in');
+                }, 600 + (index * 150));
+            });
+
+            // Animate charts
+            setTimeout(() => {
+                animateCharts();
+            }, 1200);
+
+            // Animate other sections
+            setTimeout(() => {
+                document.querySelectorAll('.chart-card, .info-card, .action-card').forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add('fade-in-up');
+                    }, index * 100);
+                });
+            }, 1500);
+        });
+
+        // Auto-update timestamp every minute
+        setInterval(() => {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }, 60000);
+
+        // Daily bar hover effects
+        document.querySelectorAll('.daily-item').forEach(item => {
+            const tooltip = item.querySelector('.daily-tooltip');
+            const bar = item.querySelector('.daily-fill');
+            
+            item.addEventListener('mouseenter', () => {
+                tooltip.classList.add('visible');
+                bar.style.filter = 'brightness(1.2)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('visible');
+                bar.style.filter = 'brightness(1)';
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                e.preventDefault();
+                refreshDashboard();
+            }
+            
+            if (e.ctrlKey && e.key === 'h') {
+                e.preventDefault();
+                window.location.href = '/';
+            }
+        });
+
+        // Add pulse animation to online indicators
+        setInterval(() => {
+            document.querySelectorAll('.status-indicator.online').forEach(indicator => {
+                indicator.style.animation = 'pulse 1s ease-in-out';
+                setTimeout(() => {
+                    indicator.style.animation = '';
+                }, 1000);
+            });
+        }, 5000);
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .float-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float-random 8s ease-in-out infinite;
+        }
+
+        .float-1 {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .float-2 {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+
+        .float-3 {
+            width: 40px;
+            height: 40px;
+            bottom: 30%;
+            left: 70%;
+            animation-delay: 4s;
+        }
+
+        .float-4 {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+
+        .header-brand.slide-in-left {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .brand-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand-info h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-info p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+
+        .header-actions.slide-in-right {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        /* Modern Breadcrumb */
+        .modern-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .modern-breadcrumb.fade-in {
+            opacity: 1;
+        }
+
+        .breadcrumb-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .breadcrumb-current {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .stat-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-background {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .card-blue .stat-background {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .card-green .stat-background {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .card-purple .stat-background {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .card-orange .stat-background {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        .stat-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-blue .stat-number {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-green .stat-number {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-purple .stat-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-orange .stat-number {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #28a745;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-blue .stat-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .card-green .stat-icon {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .card-purple .stat-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .card-orange .stat-icon {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .chart-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .chart-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-title h3 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .chart-title i {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .chart-content {
+            padding: 2rem;
+        }
+
+        /* Status Chart */
+        .status-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 150px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-indicator.status-success {
+            background: #28a745;
+        }
+
+        .status-indicator.status-fallback-success {
+            background: #ffc107;
+        }
+
+        .status-indicator.status-error,
+        .status-indicator.status-scraper-error {
+            background: #dc3545;
+        }
+
+        .status-indicator.status-validation-error {
+            background: #6f42c1;
+        }
+
+        .status-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .status-bar-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-bar {
+            flex: 1;
+            height: 8px;
+            background: #f1f3f4;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .status-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        .status-fill.status-success {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+
+        .status-fill.status-fallback-success {
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+        }
+
+        .status-fill.status-error,
+        .status-fill.status-scraper-error {
+            background: linear-gradient(90deg, #dc3545, #e83e8c);
+        }
+
+        .status-fill.status-validation-error {
+            background: linear-gradient(90deg, #6f42c1, #e83e8c);
+        }
+
+        .status-count {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        /* Case Type Chart */
+        .case-type-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .case-type-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .case-type-info {
+            min-width: 200px;
+        }
+
+        .case-type-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .case-type-count {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .case-type-bar-container {
+            flex: 1;
+        }
+
+        .case-type-bar {
+            width: 100%;
+            height: 8px;
+            background: #f1f3f4;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .case-type-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        /* Daily Activity Chart */
+        .daily-activity-chart {
+            display: flex;
+            align-items: end;
+            gap: 1rem;
+            height: 250px;
+            padding: 1rem 0;
+        }
+
+        .daily-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .daily-bar-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: end;
+            position: relative;
+        }
+
+        .daily-bar {
+            width: 60%;
+            height: 100%;
+            margin: 0 auto;
+            background: #f1f3f4;
+            border-radius: 6px;
+            display: flex;
+            align-items: end;
+            position: relative;
+        }
+
+        .daily-fill {
+            width: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 6px;
+            transition: height 0.8s ease-out, filter 0.3s ease;
+            min-height: 4px;
+        }
+
+        .daily-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .daily-tooltip.visible {
+            opacity: 1;
+        }
+
+        .daily-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .daily-label {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* No Data States */
+        .no-data {
+            text-align: center;
+            color: #6c757d;
+            padding: 3rem 2rem;
+        }
+
+        .no-data.large {
+            padding: 4rem 2rem;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .no-data h4 {
+            font-size: 1.3rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-data p {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .info-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .info-header h3 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .info-content {
+            padding: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #495057;
+            flex: 1;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .info-value a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Status Items */
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-indicator.online {
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.warning {
+            background: #ffc107;
+        }
+
+        .status-indicator.success {
+            background: #17a2b8;
+        }
+
+        .status-info .status-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-info .status-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Actions Section */
+        .actions-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .action-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .action-card.card-blue::before {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+
+        .action-card.card-green::before {
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+        }
+
+        .action-card.card-purple::before {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .action-card.card-orange::before {
+            background: linear-gradient(90deg, #fa709a, #fee140);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .action-card.card-blue .action-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .action-card.card-green .action-icon {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .action-card.card-purple .action-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .action-card.card-orange .action-icon {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        .action-content {
+            flex: 1;
+        }
+
+        .action-content h4 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .action-content p {
+            color: #6c757d;
+            line-height: 1.5;
+        }
+
+        .action-arrow {
+            color: #6c757d;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover .action-arrow {
+            transform: translateX(5px);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Toast System */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left: 5px solid #28a745;
+        }
+
+        .toast-content {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast-close {
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+        }
+
+        /* Modern Footer */
+        .modern-footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 2rem;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%232c3e50'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-main {
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-stat {
+            text-align: center;
+        }
+
+        .footer-stat .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f39c12;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes float-random {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1) rotate(0deg); 
+            }
+            25% { 
+                transform: translate(15px, -15px) scale(1.1) rotate(90deg); 
+            }
+            50% { 
+                transform: translate(-10px, -25px) scale(0.9) rotate(180deg); 
+            }
+            75% { 
+                transform: translate(-15px, 10px) scale(1.05) rotate(270deg); 
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .brand-info h1 {
+                font-size: 2.2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .daily-activity-chart {
+                height: 200px;
+            }
+
+            .daily-bar {
+                width: 80%;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .footer-stats {
+                gap: 2rem;
+            }
+
+            .toast {
+                right: 1rem;
+                left: 1rem;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-info h1 {
+                font-size: 1.8rem;
+            }
+
+            .brand-info p {
+                font-size: 1rem;
+            }
+
+            .chart-header {
+                padding: 1rem 1.5rem;
+            }
+
+            .chart-content {
+                padding: 1.5rem;
+            }
+
+            .action-card {
+                padding: 1.5rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</body>
+</html>
